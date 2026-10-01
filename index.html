@@ -3,23 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Ship of Theseus</title>
+    <title>FIA Secure Archive</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main class="stage" aria-live="polite">
-      <section class="scene is-visible" id="scene">
-        <p class="eyebrow" id="eyebrow">第一块木板</p>
-        <h1 id="title">你在一片黑暗中醒来。</h1>
-        <p class="text" id="text">
-          远处有字慢慢浮现，像潮水退去后露出的船骨。
-        </p>
-        <div class="choices" id="choices"></div>
+    <main class="terminal-shell" id="app" aria-live="polite">
+      <section class="panel panel--login" id="login-screen">
+        <div class="brand">
+          <p class="brand__mark">FIA</p>
+          <p class="brand__name">FRONTIER INTELLIGENCE ARCHITECTURE</p>
+        </div>
+
+        <div class="access-card">
+          <h1>SECURE ARCHIVE</h1>
+          <form id="access-form" autocomplete="off">
+            <label for="access-code">ENTER ACCESS CODE</label>
+            <div class="access-row">
+              <input id="access-code" name="access-code" type="text" spellcheck="false" autofocus />
+              <button type="submit">VERIFY</button>
+            </div>
+            <p class="error-message" id="access-error" role="alert"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel panel--archive is-hidden" id="archive-screen">
+        <div class="terminal-output" id="terminal-output"></div>
+        <div class="interaction" id="interaction"></div>
       </section>
     </main>
 
     <noscript>
-      <p class="noscript">这个页面需要启用 JavaScript 才能体验交互剧情。</p>
+      <p class="noscript">这个页面需要启用 JavaScript 才能访问 FIA Secure Archive。</p>
     </noscript>
 
     <script src="./script.js"></script>

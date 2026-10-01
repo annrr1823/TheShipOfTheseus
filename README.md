@@ -1,12 +1,23 @@
-# The Ship of Theseus
+# FIA Secure Archive
 
-一个可以直接部署到 GitHub Pages 的纯静态交互页面。
+一个可部署到 GitHub Pages 的纯静态交互页面。
+
+## 当前流程
+
+- 第一屏为 `FIA Secure Archive` 企业化访问终端。
+- 正确访问码为 `Interlinked`。
+- 验证通过后显示 `ACCESS GRANTED` 和 `LOADING...`，随后进入系统日志异常。
+- 玩家输入姓名后，页面会在后续文本中使用该名字。
+- 选择 `YES` 会触发 `WARNING` 并结束。
+- 选择 `NO` 后进入三道选择题。
+- 任意题答错会黑屏结束。
+- 全部答对后进入白光最终结局和作者留言。
 
 ## 本地预览
 
 直接用浏览器打开 `index.html` 即可。
 
-如果想用本地服务器预览，也可以在项目目录运行：
+如果想用本地服务器预览，可以在项目目录运行：
 
 ```bash
 python -m http.server 8080
