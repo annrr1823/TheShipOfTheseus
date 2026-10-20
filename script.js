@@ -287,29 +287,78 @@ async function showWrongAnswer() {
   document.body.classList.add("is-blackout");
 }
 
+const pieceModal = document.querySelector("#piece-modal");
+const pieceModalPanel = document.querySelector("#piece-modal-panel");
+const pieceModalFrame = document.querySelector("#piece-modal-frame");
+const pieceShards = document.querySelector("#piece-shards");
+const alarmOverlay = document.querySelector("#alarm-overlay");
+const blackoutVeil = document.querySelector("#blackout-veil");
+
+function buildShards() {
+  pieceShards.replaceChildren();
+  const cols = 4;
+  const rows = 4;
+
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      const shard = document.createElement("div");
+      shard.className = "piece-shard";
+      shard.style.setProperty("--col", String(col));
+      shard.style.setProperty("--row", String(row));
+      shard.style.setProperty("--cols", String(cols));
+      shard.style.setProperty("--rows", String(rows));
+      shard.style.setProperty("--tx", `${(Math.random() * 2 - 1) * 140}vw`);
+      shard.style.setProperty("--ty", `${(Math.random() * 2 - 1) * 90}vh`);
+      shard.style.setProperty("--rot", `${(Math.random() * 2 - 1) * 720}deg`);
+      shard.style.setProperty("--delay", `${Math.random() * 120}ms`);
+      pieceShards.append(shard);
+    }
+  }
+}
+
 async function showFinalAnswer() {
   showMessage("...\n\nYou got them all right.\n\nSo you finally understand.");
-  await wait(2600);
+  await wait(2800);
 
-  document.body.classList.add("is-whiteout");
-  terminalOutput.replaceChildren();
+  showMessage(
+    "Go find Max. I need your help.\n\n" +
+      "Take this fragment to the place where flowers die and flames rage in the dark.\n" +
+      "There, seek him through a light that should not exist.",
+  );
+  await wait(5200);
+
   clearInteraction();
+  terminalOutput.replaceChildren();
 
-  const ending = document.createElement("section");
-  ending.className = "ending";
-  ending.innerHTML = `
-    <div class="ending__content">
-      <h2>FINAL ENDING</h2>
-      <p>
-        亲爱的 ${state.playerName}<br />
-        真的非常感谢你玩到这里！<br />
-        如你所见，现在这只是一个半成品，还有很多没有完成的地方。我一个人确实驾驭不了整个故事，欢迎一起合作产出，一起丰富这个小游戏。<br />
-        如果你有想法或者建议，请随时与我交流。当然，更欢迎你私信和我对一下整个故事的答案，直接xhs私信我就好。我后面会把档案、报纸、票根等等都做成实体周边，如果感兴趣可以先进q群:1058350923<br />
-        RR
-      </p>
-    </div>
-  `;
-  archiveScreen.append(ending);
+  pieceModal.hidden = false;
+  document.body.classList.add("piece-open");
+  await wait(2800);
+
+  pieceModalPanel.classList.add("is-shaking");
+  await wait(1600);
+
+  buildShards();
+  pieceModalPanel.classList.remove("is-shaking");
+  pieceModalPanel.classList.add("is-shattering");
+  pieceModalFrame.classList.add("is-shattering-host");
+  await wait(1400);
+
+  pieceModal.hidden = true;
+  document.body.classList.remove("piece-open");
+  document.body.classList.add("is-alarm");
+  alarmOverlay.hidden = false;
+  await wait(3600);
+
+  blackoutVeil.hidden = false;
+  document.body.classList.add("is-extinguish");
+  await wait(1600);
+
+  alarmOverlay.hidden = true;
+  document.body.classList.remove("is-alarm", "is-extinguish");
+  document.body.classList.add("is-blackout");
+  archiveScreen.replaceChildren();
+  await wait(900);
+  blackoutVeil.hidden = true;
 }
 
 accessForm.addEventListener("submit", (event) => {

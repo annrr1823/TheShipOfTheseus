@@ -262,31 +262,185 @@ button:focus-visible {
   animation: warningFlash 520ms steps(2, end) 7;
 }
 
-.ending {
+.piece-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
   display: grid;
-  min-height: 70vh;
   place-items: center;
-  text-align: center;
+  padding: 1.25rem;
 }
 
-.ending__content {
-  width: min(740px, 100%);
-  animation: whiteIn 2600ms ease both;
+.piece-modal[hidden] {
+  display: none;
 }
 
-.ending h2 {
-  margin: 0 0 2rem;
-  font-size: clamp(2rem, 8vw, 5rem);
+.piece-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.piece-modal-panel {
+  position: relative;
+  width: min(520px, 100%);
+  border: 1px solid var(--line);
+  background: #0b0f12;
+  padding: 1.35rem 1.35rem 1.5rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  animation: modalIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.piece-modal-kicker {
+  margin: 0 0 0.35rem;
+  color: var(--danger);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.piece-modal-panel h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.08em;
 }
 
-.ending p {
-  margin: 0 auto;
-  color: rgba(17, 24, 32, 0.76);
-  font-family: "Microsoft YaHei", sans-serif;
-  font-size: clamp(1rem, 2.4vw, 1.25rem);
-  line-height: 2;
+.piece-modal-frame {
+  position: relative;
+  overflow: visible;
+  border: 1px solid var(--line);
+  background: #050607;
+}
+
+.piece-modal-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.piece-modal-frame.is-shattering-host img {
+  visibility: hidden;
+}
+
+.piece-modal-panel.is-shaking {
+  animation: pieceShake 0.12s linear infinite;
+}
+
+.piece-modal-panel.is-shattering {
+  overflow: visible;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+.piece-modal-panel.is-shattering .piece-modal-kicker,
+.piece-modal-panel.is-shattering h2 {
+  opacity: 0;
+}
+
+.piece-shards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: visible;
+}
+
+.piece-modal-panel.is-shattering .piece-shards {
+  opacity: 1;
+}
+
+.piece-shard {
+  position: absolute;
+  top: calc(var(--row) * 100% / var(--rows));
+  left: calc(var(--col) * 100% / var(--cols));
+  width: calc(100% / var(--cols));
+  height: calc(100% / var(--rows));
+  background-image: url("./piece_3.png");
+  background-repeat: no-repeat;
+  background-size: calc(var(--cols) * 100%) calc(var(--rows) * 100%);
+  background-position:
+    calc(var(--col) * 100% / (var(--cols) - 1)) calc(var(--row) * 100% / (var(--rows) - 1));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform-origin: center;
+  animation: shardFly 1.25s cubic-bezier(0.22, 0.8, 0.3, 1) forwards;
+  animation-delay: var(--delay);
+}
+
+.alarm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-content: center;
+  gap: 0.8rem;
+  padding: 1.5rem;
+  text-align: center;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 59, 59, 0.12) 0,
+      rgba(255, 59, 59, 0.12) 2px,
+      transparent 3px,
+      transparent 7px
+    ),
+    radial-gradient(circle at center, rgba(255, 30, 30, 0.28), rgba(0, 0, 0, 0.82));
+  animation: alarmPulse 0.45s steps(2, end) infinite;
+}
+
+.alarm-overlay[hidden] {
+  display: none;
+}
+
+.alarm-banner {
+  color: #ffd4d4;
+  font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+  letter-spacing: 0.28em;
+}
+
+.alarm-text {
+  color: var(--danger);
+  font-size: clamp(1.4rem, 6vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 18px rgba(255, 59, 59, 0.85),
+    0 0 48px rgba(255, 59, 59, 0.45);
+}
+
+.alarm-sub {
+  color: rgba(255, 210, 210, 0.72);
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  letter-spacing: 0.18em;
+}
+
+.blackout-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: #000;
+  opacity: 0;
+}
+
+.blackout-veil[hidden] {
+  display: none !important;
+}
+
+body.is-extinguish .blackout-veil:not([hidden]) {
+  display: block;
+  animation: extinguish 1.5s ease forwards;
+}
+
+body.is-alarm .terminal-shell {
+  filter: contrast(1.25) saturate(1.4);
+}
+
+body.piece-open {
+  overflow: hidden;
 }
 
 .noscript {
@@ -312,18 +466,6 @@ button:focus-visible {
   }
 }
 
-@keyframes whiteIn {
-  from {
-    opacity: 0;
-    filter: blur(18px);
-  }
-
-  to {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
 @keyframes warningFlash {
   0%,
   100% {
@@ -334,6 +476,84 @@ button:focus-visible {
   50% {
     opacity: 0.08;
     transform: scale(1.035);
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pieceShake {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  20% {
+    transform: translate(-7px, 3px) rotate(-1.2deg);
+  }
+
+  40% {
+    transform: translate(8px, -4px) rotate(1.4deg);
+  }
+
+  60% {
+    transform: translate(-5px, -2px) rotate(-0.8deg);
+  }
+
+  80% {
+    transform: translate(6px, 4px) rotate(1deg);
+  }
+
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes shardFly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    filter: brightness(1);
+  }
+
+  35% {
+    opacity: 1;
+    filter: brightness(1.35);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.55);
+    filter: brightness(0.4);
+  }
+}
+
+@keyframes alarmPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes extinguish {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
