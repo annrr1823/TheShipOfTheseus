@@ -195,23 +195,16 @@ async function startArchive() {
       state.playerName = value || "User";
       clearInteraction();
       await wait(500);
-      askIdentity();
+
+      const identity = state.playerName.toLowerCase();
+      if (identity === "fia" || identity === "toto") {
+        showFiaWarning();
+        return;
+      }
+
+      beginQuestionIntro();
     },
   });
-}
-
-async function askIdentity() {
-  showMessage(`...\n\n${state.playerName}.\n\nYou're not FIA.\n\nAre you?`);
-  showChoices([
-    {
-      label: "YES",
-      onSelect: showFiaWarning,
-    },
-    {
-      label: "NO",
-      onSelect: beginQuestionIntro,
-    },
-  ]);
 }
 
 async function beginQuestionIntro() {
